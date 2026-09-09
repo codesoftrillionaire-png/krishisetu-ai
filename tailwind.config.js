@@ -8,9 +8,9 @@ export default {
     extend: {
       colors: {
         krishi: {
-          light: '#e6f4ea',
-          DEFAULT: '#2e7d32',
-          dark: '#1b5e20'
+          DEFAULT: '#617A55', // Primary Sage Green
+          dark: '#435334',    // Dark Sage Green
+          light: '#E9EFEC',   // Soft Sage Background
         }
       }
     },

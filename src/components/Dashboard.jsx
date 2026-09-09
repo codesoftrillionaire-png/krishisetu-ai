@@ -55,12 +55,12 @@ export default function Dashboard({ lang, txt }) {
       </div>
 
       {/* AI Recommendation Banner */}
-      <div className="bg-emerald-800 text-white p-4 rounded-2xl shadow-md space-y-1">
-        <div className="flex items-center gap-2 font-bold text-emerald-200 text-sm">
+      <div className="bg-krishi-dark text-white p-4 rounded-2xl shadow-md space-y-1">
+        <div className="flex items-center gap-2 font-bold text-krishi-light text-sm">
           <Sparkles size={18} />
           <span>{txt.aiRecTitle}</span>
         </div>
-        <p className="text-xs font-medium leading-relaxed text-emerald-50">
+        <p className="text-xs font-medium leading-relaxed text-gray-100">
           {txt.aiRecBody}
         </p>
       </div>
@@ -73,7 +73,7 @@ export default function Dashboard({ lang, txt }) {
             ₹{selectedCrop.basePrice.toLocaleString()} <span className="text-xs font-normal text-gray-500">/ quintal</span>
           </p>
         </div>
-        <div className="bg-emerald-50 p-3 rounded-xl text-emerald-600">
+        <div className="bg-krishi-light p-3 rounded-xl text-krishi">
           <TrendingUp size={28} />
         </div>
       </div>
@@ -88,16 +88,16 @@ export default function Dashboard({ lang, txt }) {
               <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#888' }} />
               <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#888' }} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#10b981', borderRadius: '12px', border: 'none', color: '#fff' }}
+                contentStyle={{ backgroundColor: '#435334', borderRadius: '12px', border: 'none', color: '#fff' }}
                 itemStyle={{ color: '#fff', fontWeight: 'bold' }}
                 formatter={(value) => [`₹${value}`, 'Price']}
               />
               <Line 
                 type="monotone" 
                 dataKey="price" 
-                stroke="#10b981" 
+                stroke="#617A55" 
                 strokeWidth={3} 
-                dot={{ r: 4, fill: '#10b981' }} 
+                dot={{ r: 4, fill: '#617A55' }} 
                 activeDot={{ r: 6 }} 
               />
             </LineChart>
