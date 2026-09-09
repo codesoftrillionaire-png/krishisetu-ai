@@ -1,59 +1,107 @@
-import React from 'react';
-import { MapPin, Sprout, ChevronRight, Sparkles } from 'lucide-react';
-import { demoMarkets } from '../data';
+import React, { useState } from 'react';
+import { MapPin, Sprout, Sparkles, TrendingUp } from 'lucide-react';
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+import { locations, cropsList, getTrendData } from '../data';
 
 export default function Dashboard({ lang, txt }) {
-  const recommended = demoMarkets.find(m => m.isRecommended);
+  const [selectedLoc, setSelectedLoc] = useState(locations[0]);
+  const [selectedCrop, setSelectedCrop] = useState(cropsList[0]);
+
+  const trendData = getTrendData(selectedCrop.basePrice);
 
   return (
-    <div className="space-y-6">
-      {/* Greeting & Selectors */}
+    <div className="space-y-5">
+      {/* Greeting Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">{txt.greeting}</h2>
-        <div className="flex gap-2 mb-4">
-          <div className="bg-white p-3 rounded-xl border border-gray-200 flex-1 flex items-center gap-2 shadow-sm">
-            <MapPin className="text-krishi" size={20} />
-            <select className="bg-transparent outline-none w-full font-medium text-gray-700">
-              <option>Muzaffarpur, BR</option>
-              <option>Patna, BR</option>
-            </select>
-          </div>
-          <div className="bg-white p-3 rounded-xl border border-gray-200 flex-1 flex items-center gap-2 shadow-sm">
-            <Sprout className="text-krishi" size={20} />
-            <select className="bg-transparent outline-none w-full font-medium text-gray-700">
-              <option>Wheat (गेहूं)</option>
-              <option>Paddy (धान)</option>
-            </select>
-          </div>
+        <h2 className="text-2xl font-black text-gray-800 flex items-center gap-2">
+          {txt.hello} 👋
+        </h2>
+      </div>
+
+      {/* Dropdown Filters */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Location Selector */}
+        <div className="bg-white p-3 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-2">
+          <MapPin size={20} className="text-krishi shrink-0" />
+          <select 
+            value={selectedLoc} 
+            onChange={(e) => setSelectedLoc(e.target.value)}
+            className="w-full bg-transparent font-bold text-gray-700 focus:outline-none text-sm"
+          >
+            {locations.map((loc, idx) => (
+              <option key={idx} value={loc}>{loc}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Crop Selector */}
+        <div className="bg-white p-3 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-2">
+          <Sprout size={20} className="text-krishi shrink-0" />
+          <select 
+            value={selectedCrop.id} 
+            onChange={(e) => {
+              const crop = cropsList.find(c => c.id === e.target.value);
+              setSelectedCrop(crop);
+            }}
+            className="w-full bg-transparent font-bold text-gray-700 focus:outline-none text-sm"
+          >
+            {cropsList.map((crop) => (
+              <option key={crop.id} value={crop.id}>
+                {lang === 'hi' ? crop.hi : crop.en}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
       {/* AI Recommendation Banner */}
-      <div className="bg-gradient-to-r from-krishi to-green-500 rounded-2xl p-4 text-white shadow-lg flex items-start gap-3">
-        <Sparkles size={24} className="flex-shrink-0 mt-1 text-yellow-300" />
+      <div className="bg-emerald-800 text-white p-4 rounded-2xl shadow-md space-y-1">
+        <div className="flex items-center gap-2 font-bold text-emerald-200 text-sm">
+          <Sparkles size={18} />
+          <span>{txt.aiRecTitle}</span>
+        </div>
+        <p className="text-xs font-medium leading-relaxed text-emerald-50">
+          {txt.aiRecBody}
+        </p>
+      </div>
+
+      {/* Price Summary Card */}
+      <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-center">
         <div>
-          <p className="font-semibold text-sm md:text-base leading-snug">{txt.recommendation}</p>
+          <p className="text-xs text-gray-400 font-semibold uppercase">{txt.currentPrice}</p>
+          <p className="text-3xl font-black text-gray-900 mt-1">
+            ₹{selectedCrop.basePrice.toLocaleString()} <span className="text-xs font-normal text-gray-500">/ quintal</span>
+          </p>
+        </div>
+        <div className="bg-emerald-50 p-3 rounded-xl text-emerald-600">
+          <TrendingUp size={28} />
         </div>
       </div>
 
-      {/* Quick Price Card */}
-      <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-        <h3 className="text-gray-500 text-sm font-semibold mb-1">{txt.currentPrice}</h3>
-        <div className="flex items-baseline gap-2">
-          <span className="text-4xl font-black text-gray-900">₹2,300</span>
-          <span className="text-gray-500">/ quintal</span>
-        </div>
-        
-        {/* Mock Chart */}
-        <div className="mt-6">
-          <p className="text-xs text-gray-400 mb-2 font-medium">PRICE TREND (LAST 7 DAYS)</p>
-          <div className="flex items-end gap-2 h-20">
-            {[40, 50, 45, 60, 55, 70, 85].map((h, i) => (
-              <div key={i} className="bg-krishi-light w-full rounded-t-sm" style={{ height: `${h}%` }}>
-                {i === 6 && <div className="bg-krishi w-full h-full rounded-t-sm"></div>}
-              </div>
-            ))}
-          </div>
+      {/* Price Trend Chart (Recharts) */}
+      <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm space-y-3">
+        <h3 className="text-sm font-bold text-gray-700">{txt.priceTrend}</h3>
+        <div className="h-48 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#888' }} />
+              <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: '#888' }} />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#10b981', borderRadius: '12px', border: 'none', color: '#fff' }}
+                itemStyle={{ color: '#fff', fontWeight: 'bold' }}
+                formatter={(value) => [`₹${value}`, 'Price']}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="price" 
+                stroke="#10b981" 
+                strokeWidth={3} 
+                dot={{ r: 4, fill: '#10b981' }} 
+                activeDot={{ r: 6 }} 
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>
