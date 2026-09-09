@@ -83,9 +83,20 @@ export const getTrendData = (basePrice) => [
   { month: 'Jun', price: basePrice }
 ];
 
+export const demoMarkets = [
+  { id: 1, name: "Muzaffarpur Central Mandi", dist: "5 km away", price: 2300, net: 2220 },
+  { id: 2, name: "Hajipur APMC Market", dist: "32 km away", price: 2420, net: 2310 },
+  { id: 3, name: "Samastipur Grain Hub", dist: "45 km away", price: 2280, net: 2150 }
+];
+
 export const demoBuyers = [
   { id: 1, name: "Bihar Agro Traders", loc: "Muzaffarpur", crop: "Wheat / गेहूं", price: 2350, qty: "50 Quintals", verified: true },
   { id: 2, name: "Patna Grain Logistics", loc: "Patna", crop: "Paddy / धान", price: 2220, qty: "100 Quintals", verified: true },
   { id: 3, name: "Vaishali Processing Co.", loc: "Hajipur", crop: "Maize / मक्का", price: 2000, qty: "30 Quintals", verified: false },
   { id: 4, name: "Mithila Cold Storage", loc: "Darbhanga", crop: "Potato / आलू", price: 1300, qty: "80 Quintals", verified: true }
+];
+
+export const demoFpos = [
+  { id: 1, name: "Tirhut Farmers Collective", members: 340, requirement: "Bulk Wheat Seeds & Fertilizers", discount: "15% OFF" },
+  { id: 2, name: "Vaishali Krishi Producer Co.", members: 510, requirement: "Solar Irrigation Pumps", discount: "20% OFF" }
 ];
